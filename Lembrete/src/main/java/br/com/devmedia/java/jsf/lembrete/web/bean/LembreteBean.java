@@ -52,7 +52,6 @@ public class LembreteBean {
 			context.addMessage(null, new FacesMessage("Lembrete adicionado com sucesso!"));
 			context.getExternalContext().getFlash().setKeepMessages(true);
 		} catch (Exception e) {
-			System.out.println(">>> Exception: " + e.getMessage());
 			FacesContext context = FacesContext.getCurrentInstance();
 			context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, e.getMessage(), e.getMessage()));
 			context.getExternalContext().getFlash().setKeepMessages(true);

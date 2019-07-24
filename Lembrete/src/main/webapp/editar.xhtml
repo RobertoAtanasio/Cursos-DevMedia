@@ -19,6 +19,7 @@
     <h:messages globalOnly="true"/>
 
     <h:panelGroup rendered="#{lembreteBean.lembrete.id != 0}">
+       
         <h1>Editar lembrete
             "<h:outputText value="#{lembreteBean.lembrete.titulo}"/>"
         </h1>
@@ -27,7 +28,6 @@
             <h:outputText value="#{lembreteBean.lembrete.criacao}">
                 <f:convertDateTime pattern="dd/MM/yyyy" timeZone="#{initParam.timezone}"/>
             </h:outputText>
-            .
         </p>
 
         <h:form>
