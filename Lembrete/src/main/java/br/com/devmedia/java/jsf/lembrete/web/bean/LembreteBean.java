@@ -103,7 +103,7 @@ public class LembreteBean {
 			if (lembrete == null || lembrete.getId() == 0) {
 				lembrete = new Lembrete();
 
-				throw new Exception("Lembrete n√£o encontrado.");
+				throw new Exception("Lembrete n„o encontrado.");
 			}
 		} catch (Exception e) {
 			FacesMessage message = new FacesMessage(e.getMessage());
