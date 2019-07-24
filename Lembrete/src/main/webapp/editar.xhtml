@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core">
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <title>Editar lembrete</title>
+
+    <f:metadata>
+        <f:viewParam name="lembrete" value="#{lembreteBean.lembrete.id}"/>
+        <f:event type="preRenderView" listener="#{lembreteBean.selecionar}"/>
+    </f:metadata>
+</h:head>
+<h:body>
+
+    <h:messages globalOnly="true"/>
+
+    <h:panelGroup rendered="#{lembreteBean.lembrete.id != 0}">
+        <h1>Editar lembrete
+            "<h:outputText value="#{lembreteBean.lembrete.titulo}"/>"
+        </h1>
+
+        <p>Cadastrado em
+            <h:outputText value="#{lembreteBean.lembrete.criacao}">
+                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="#{initParam.timezone}"/>
+            </h:outputText>
+            .
+        </p>
+
+        <h:form>
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Título:"/>
+                <h:inputText id="titulo" value="#{lembreteBean.lembrete.titulo}" required="true">
+                    <f:validateLength minimum="3" maximum="255"/>
+                </h:inputText>
+                <h:message for="titulo"/>
+
+                <h:outputLabel value="Descrição:"/>
+                <h:inputTextarea id="descricao" value="#{lembreteBean.lembrete.descricao}" required="true">
+                    <f:validateLength minimum="3" maximum="255"/>
+                </h:inputTextarea>
+                <h:message for="descricao"/>
+
+                <h:outputLabel value="Início:"/>
+                <h:inputText id="data-inicio" value="#{lembreteBean.lembrete.inicio}" required="true">
+                    <f:convertDateTime pattern="dd/MM/yyyy" timeZone="#{initParam.timezone}"/>
+                </h:inputText>
+                <h:message for="data-inicio"/>
+
+                <h:outputLabel value="Prioridade:"/>
+                <h:selectOneMenu id="prioridade" value="#{lembreteBean.lembrete.prioridade}" required="true">
+                    <f:selectItems value="#{lembreteBean.prioridades}"
+                                   var="prioridade"
+                                   itemValue="#{prioridade}"
+                                   itemLabel="#{prioridade.descricao}"
+                    />
+                </h:selectOneMenu>
+                <h:message for="prioridade"/>
+
+                <h:outputLabel value="Arquivado:"/>
+                <h:selectOneRadio id="arquivado" value="#{lembreteBean.lembrete.arquivado}">
+                    <f:selectItem itemValue="true" itemLabel="SIM"/>
+                    <f:selectItem itemValue="false" itemLabel="NÃO"/>
+                </h:selectOneRadio>
+                <h:message for="arquivado"/>
+            </h:panelGrid>
+
+            <h:commandButton value="Enviar" action="#{lembreteBean.atualizar}"/>
+        </h:form>
+
+        <h:link value="Voltar" outcome="home"/>
+    </h:panelGroup>
+</h:body>
+</html>

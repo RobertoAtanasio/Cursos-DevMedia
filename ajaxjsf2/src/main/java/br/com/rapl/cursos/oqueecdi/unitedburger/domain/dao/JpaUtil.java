@@ -7,21 +7,21 @@ import javax.persistence.Persistence;
 public class JpaUtil {
 
 	private static EntityManagerFactory unitedburgerEmf;
-	  private static EntityManagerFactory parceriasEmf;
+	private static EntityManagerFactory parceriasEmf;
 
-	  public static EntityManager getUnitedBurgerEntityManager() {
-	    if (unitedburgerEmf == null) {
-	      unitedburgerEmf = Persistence.createEntityManagerFactory("unitedburger");
-	    }
+	public static EntityManager getUnitedBurgerEntityManager() {
+		if (unitedburgerEmf == null) {
+			unitedburgerEmf = Persistence.createEntityManagerFactory("unitedburger");
+		}
 
-	    return unitedburgerEmf.createEntityManager();
-	  }
+		return unitedburgerEmf.createEntityManager();
+	}
 
-	  public static EntityManager getParceriasEntityManager() {
-	    if (parceriasEmf == null) {
-	      parceriasEmf = Persistence.createEntityManagerFactory("parcerias");
-	    }
+	public static EntityManager getParceriasEntityManager() {
+		if (parceriasEmf == null) {
+			parceriasEmf = Persistence.createEntityManagerFactory("parcerias");
+		}
 
-	    return parceriasEmf.createEntityManager();
-	  }
+		return parceriasEmf.createEntityManager();
+	}
 }
