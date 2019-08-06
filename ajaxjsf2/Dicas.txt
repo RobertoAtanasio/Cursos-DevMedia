@@ -1,0 +1,196 @@
+ Documentação:
+
+ O Tomcat não possui suporte nativo a injeção de dependências, mas com alguns passos conseguimos, através de 
+ uma biblioteca ter acesso a esse serviço. Para isso utilizaremos o Weld, da JBoss.
+
+ No Maven, basta adicionar o Weld como uma das dependências utilizadas pelo projeto no arquivo pom.xml, como 
+ demonstrado abaixo:
+
+  <dependency>
+      <groupId>org.jboss.weld.servlet</groupId>
+      <artifactId>weld-servlet</artifactId>
+      <version>2.4.5.Final</version>
+  </dependency>
+  
+ Depois disso precisamos fazer algumas configurações adicionais, começando pela criação do arquivo META-INF/beans.xml 
+ com o seguinte conteúdo:
+
+  <?xml version="1.0" encoding="UTF-8"?>  
+  <beans xmlns="http://java.sun.com/xml/ns/javaee" 
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+       xsi:schemaLocation="http://java.sun.com/xml/ns/javaee
+       http://java.sun.com/xml/ns/javaee/beans_1_0.xsd">  
+  </beans>
+  
+ Em um ambiente Java EE apenas a presença desse arquivo é suficiente para ativar o suporte a CDI. Uma vez que estamos 
+ no Tomcat precisamos também criar o arquivo META-INF/context.xml com o seguinte conteúdo:
+
+  <Context>  
+    <Resource name="BeanManager" 
+     auth="Container" 
+     type="javax.enterprise.inject.spi.BeanManager" 
+     factory="org.jboss.weld.resources.ManagerObjectFactory"/>  
+  </Context>
+
+ Através desse código possibilitamos o acesso a CDI, que é disponibilizada para uso em ambiente de produção com a 
+ seguinte declaração no arquivo WEB-INF/web.xml:
+
+  <resource-env-ref>  
+    <resource-env-ref-name>BeanManager</resource-env-ref-name>  
+    <resource-env-ref-type>javax.enterprise.inject.spi.BeanManager
+    </resource-env-ref-type>  
+  </resource-env-ref>
+
+//=================================================================================================================
+
+ OBSERVAÇÕES:
+
+ Não devemos utilizar as anotações da JSF e da CDI ao mesmo tempo. Não é uma boa prática!
+
+ A JSF permite a utilizarmos inversão de controle, IoC, através da injeção de dependências, DI.
+ A fim de evitarmos conflitos entre as implementações da IoC/DI da CDI e da JSF, precisamos substituir as 
+ anotações do pacote javax.faces.bean pelas dos pacotes javax.inject e javax.enterprise.context.
+   
+ LOGO, Em lugar da anotação @RequestScoped do pacote javax.faces.bean passaremos a utilizar a anotação 
+ homônima do pacote javax.enterprise.context, conforme visto abaixo:
+   
+   @RequestScoped
+   public class ContatoBean { … 
+
+ Isso permitirá a CDI controlar o escopo deste objeto, que nesse caso vai do momento em que a requisição se inicia 
+ e se extende até que ela seja encerrada.
+
+ No pacote javax.inject encontraremos a anotação @Named, que permitirá acessar as propriedades do bean através da 
+ Expression Language nas views da aplicação. Devemos utilizá-la em lugar da anotação @ManagedBean, deixando o 
+ código da seguinte forma:
+
+   @Named
+   @RequestScoped
+   public class ContatoBean { … 
+ 
+ O gerenciamento do ciclo de vida dos objetos, baseado em seu escopo, pode também ser motivo de muitos conflitos 
+ entre essas APIs. Alguns escopos existem apenas na CDI, como é o caso de @Dependent, que modifica a forma como 
+ instâncias do bean são compartilhadas entre diferentes objetos nos quais ele seja injetado.
+
+ Por sua importância dentro do Java, a CDI tem recebido constantes atualizações e, num futuro próximo, espera-se 
+ que as suas anotações de escopo substituam as da JSF.
+ 
+ ---------------------------------------------------------------------------------------------------------------------------------
+ 
+ Em um código sem IoC/DI precisamos que cada classe dependente de outra saiba como esse segundo objeto deve ser instanciado:
+
+   private ContatoService contatoService = new ContatoService();
+ 
+ Assim que ativamos a CDI, passa a funcionar a anotação @Inject, nos permitindo injetar dependências, conforme demonstrado abaixo:
+
+   @Inject
+   private ContatoService contatoService;
+     
+ No exemplo acima, na classe ContatoService não precisamos de nenhum passo adicional para permitir que a CDI identifique como 
+ instanciar esse objeto, pois a sua construção é simples.
+ 
+ Para objetos cujo tipo concreto varie em tempo de execução ou que requeiram uma inicialização customizada, podemos criar 
+ métodos construtores.
+
+ Por exemplo, para criar um método construtor para o EntityManagerFactory, podemos criar um método em uma classe qualquer que 
+ retorne um objeto desse tipo e que seja anotado com a anotação @Produces, como visto abaixo:
+
+   @Produces
+   public EntityManagerFactory getUnitedBurgerEntityManagerFactory() {
+      return Persistence.createEntityManagerFactory("unitedburger");
+   }
+ 
+ Em seguida podemos também atribuir a esse método um escopo, utilizando as anotações do pacote javax.enterprise.context.
+
+  @Produces
+  @ApplicationScoped
+  public EntityManagerFactory getUnitedBurgerEntityManagerFactory() {
+      return Persistence.createEntityManagerFactory("unitedburger");
+  }
+ 
+ Dessa forma, o EntityManagerFactory permanecerá em memória pelo tempo em que a aplicação estiver em execução.
+
+ A partir dessa configuração o objeto será removido da memória junto da destruição do contexto ao qual ele estiver associado.
+
+ Para utilizar o EntityManagerFactory podemos apenas declarar a sua dependência, por exemplo em um parâmetro de método, 
+ como apresentado no seguinte exemplo:
+ 
+   @Produces
+   @RequestScoped
+   public EntityManager getUnitedBurgerEntityManager
+      (EntityManagerFactory factory) {
+      return factory.createEntityManager();
+   }
+ 
+ O método acima também é um método produtor, responsável por fornecer um EntityManager para a aplicação. Uma vez que o 
+ EntityManager é um objeto que deve ser único por processo de persistência, atribuímos a ele o mesmo escopo de requisição 
+ utilizado anteriormente no Managed Bean.
+
+ Neste método podemos notar novamente o funcionamento da CDI, que identificará a necessidade de injetar o 
+ EntityManagerFactory no parâmetro factory, usando o método getUnitedBurgerEntityManagerFactory() para criar um objeto 
+ desse tipo.
+ 
+ --------------------------------------------------------------------------------------------------------------------------
+ 
+ Dependency Injection é um padrão de projeto que permite, entre outras coisas, flexibilizar o acoplamento entre os objetos 
+ de uma aplicação e seus colaboradores.
+
+ Por exemplo, é muito comum que tenhamos classes DAO para permitir a gravação de dados no banco, como esta que vemos abaixo:
+
+ public class ContatoDao {
+
+    public void cadastrar(Contato contato) {
+        EntityManager em = FabricaDeEntityManager.getEntityManager();
+        … 
+    }
+ }
+ 
+ Note que aqui estamos obtendo um EntityManager indiretamente, tornando a classe DAO dependente de FabricaDeEntityManager. 
+ Seria melhor, do ponto de vista da modelagem, se ContatoDao pudesse apenas obter um EntityManager diretamente. É aqui que 
+ entra a CDI, fornecendo a ponte entre o objeto e suas dependências, entre outras coisas.
+ 
+ Na nova versão do código temos:
+
+ public class ContatoDao {
+  
+    @Inject
+    private EntityManager em;
+  
+    public void cadastrar(Contato contato) {
+        … 
+    }
+ }
+ 
+ Ao necessitar de uma instância do EntityManager a classe ContatoDao pode recebê-la da CDI e, para isso, utilizamos a 
+ anotação @Inject sobre o campo 'em'.
+ 
+ Assim a CDI injetará esta dependência, sem ser necessário para o programador descrever na classe ContatoDao como 
+ criar o objeto 'em'.
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
