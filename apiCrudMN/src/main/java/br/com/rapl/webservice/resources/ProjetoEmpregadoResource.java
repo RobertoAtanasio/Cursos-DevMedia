@@ -14,6 +14,9 @@ import javax.ws.rs.core.Response;
 import br.com.rapl.webservice.model.domain.Empregado;
 import br.com.rapl.webservice.service.RelationshipService;
 
+//OBS.: APESAR DA IDE APRESNTAR 'ERRO' ABAIXO, EM TEMPO DE EXECUÇÃO A APLICAÇÃO RECONHECE O CÓDIGO FAZENDO 
+//O LINK COM O MÉTODO 'getProjetoEmpregadoResource' EM ProjetooResource.java
+
 // Indica que nesta classe temos métodos que podem retornar dados no formato json.
 @Produces(MediaType.APPLICATION_JSON + ";charset=utf-8")
 public class ProjetoEmpregadoResource {
