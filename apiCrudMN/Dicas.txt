@@ -1,0 +1,13 @@
+1. Já que esse é um relacionamento bidirecional, precisamos declarar o atributo mappedBy em um dos lados do 
+   relacionamento. Aqui, optamos por declará-lo nessa entidade, com o valor empregados, exatamente o nome do 
+   tributo informado na entidade Projeto e que representa a lista de empregados. Essa escolha simboliza que 
+   esse atributo, empregados, será o dono do relacionamento e que a entidade Projeto representa o lado forte da relação.
+
+2. Note, ainda, a anotação @JsonIgnore, adicionada para evitar que a lista de projetos seja retornada no JSON 
+   quando solicitarmos os dados de um ou mais empregados. Por fim, gere também os métodos de acesso para o atributo 
+   projetos.
+
+3. Concluída essa etapa, assim que realizarmos a primeira operação no banco de dados, não teremos apenas as 
+   tabelas referentes às entidades Projeto e Empregado, mas também a tabela que representa o relacionamento 
+   muitos para muitos entre elas. Como definimos, via mappedBy, que o lado forte do relacionamento é a entidade 
+   Projeto, essa nova tabela terá o nome projeto_empregado.
