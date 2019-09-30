@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"> 
+
+<h:head><title>Entrada de dados</title></h:head> 
+<h:body> 
+	<h:form id="formulario">
+		<h:inputHidden value="#{controleEntrada.id}" id="id"/>
+		<h:panelGrid columns="2">
+			<f:facet name="header">Dados da Pessoa</f:facet>
+			
+			<h:outputLabel value="Nome" for="nome" />
+			<h:inputText value="#{controleEntrada.nome}" id="nome" size="50" maxlength="50"/>
+			
+			<h:outputLabel value="Senha" for="senha" />
+			<h:inputSecret value="#{controleEntrada.senha}" id="senha" redisplay="true" size="10" maxlength="10" />
+			
+			<h:outputLabel value="Observação" for="obs" />
+			<h:inputTextarea value="#{controleEntrada.obs}" id="obs" cols="30" rows="6"/>
+			
+			<h:outputLabel value="Grao Instrução" for="grau" />
+			<h:selectOneMenu value="#{controleEntrada.grauInstrucao}" id="grau">
+				<f:selectItem itemLabel="-- Selecione --" noSelectionOption="true"/>
+				<!-- <f:selectItem itemLabel="Ensino Fundamental" itemValue="Ensino Fundamental"/>
+				<f:selectItem itemLabel="Ensino Médio" itemValue="Ensino Medio"/>
+				<f:selectItem itemLabel="Ensino Superior" itemValue="Ensino Superior"/> -->
+				<f:selectItems var="item" 
+					value="#{controleEntrada.grausInstrucao}" 
+					itemValue="#{item}" 
+					itemLabel="#{item}"/>
+			</h:selectOneMenu>
+			
+			<h:outputLabel value="Grao Instrução" for="grau2" />
+			<h:selectOneRadio value="#{controleEntrada.grauInstrucao}" id="grau2" layout="lineDirection">
+				<f:selectItems var="item" 
+					value="#{controleEntrada.grausInstrucao}" 
+					itemValue="#{item}" 
+					itemLabel="#{item}"/>
+			</h:selectOneRadio>
+			
+			<h:outputLabel value="Grao Instrução" for="grau3" />
+			<h:selectOneListbox value="#{controleEntrada.grauInstrucao}" id="grau3">
+				<f:selectItems var="item" 
+					value="#{controleEntrada.grausInstrucao}" 
+					itemValue="#{item}" 
+					itemLabel="#{item}"/>
+			</h:selectOneListbox>
+			
+			<h:outputLabel value="Tecnologias" />
+			<h:selectManyListbox value="#{controleEntrada.selecionadas}">
+				<f:selectItems var="item" value="#{controleEntrada.tecnologias}" 
+					itemValue="#{item}" itemLabel="#{item}"/>
+			</h:selectManyListbox>
+			
+			<h:outputLabel value="Tecnologias" />
+			<h:selectManyCheckbox value="#{controleEntrada.selecionadas}">
+				<f:selectItems var="item" value="#{controleEntrada.tecnologias}" 
+					itemValue="#{item}" itemLabel="#{item}"/>
+			</h:selectManyCheckbox>
+			
+			<h:column>
+				<div align="center">
+					<h:commandButton action="#{controleEntrada.processa()}" value="Processar" />
+				</div>
+			</h:column>
+		</h:panelGrid>
+		
+	</h:form>
+	<h:outputText value="#{controleEntrada.saida}" escape="false" />
+</h:body> 
+</html>

@@ -1,4 +1,4 @@
-package br.com.rapl.jsfappcdi;
+package br.com.rapl.jsfappcdi.controle;
 
 import java.io.Serializable;
 import java.time.LocalDateTime;
