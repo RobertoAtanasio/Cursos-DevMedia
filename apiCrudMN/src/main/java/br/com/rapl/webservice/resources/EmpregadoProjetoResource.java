@@ -33,6 +33,7 @@ public class EmpregadoProjetoResource {
     }
 
     @GET
+    @Path("{empregadoId}")
     public List<Projeto> getProjetos(@PathParam("empregadoId") long empregadoId) {
         return service.getProjetos(empregadoId);
     }

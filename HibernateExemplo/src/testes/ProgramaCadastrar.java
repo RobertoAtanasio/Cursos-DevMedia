@@ -20,11 +20,11 @@ public class ProgramaCadastrar {
 	public static void main(String args[]) {
 		
 		Produto produto1 = new Produto();
-		produto1.setNome("Computador");
+		produto1.setNome("Computador 2");
 		produto1.setQuantidade(35);
 		
 		Produto produto2 = new Produto();
-		produto2.setNome("Mouse");
+		produto2.setNome("Mouse 2");
 		produto2.setQuantidade(100);
 		
 		EntityManager em = getEntityManager();

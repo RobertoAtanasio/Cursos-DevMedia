@@ -2,10 +2,25 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:h="http://java.sun.com/jsf/html"> 
+      xmlns:h="http://xmlns.jcp.org/jsf/html"> 
 
-<h:head></h:head> 
+<f:view encoding="ISO-8859-1" contentType="text/html">
+<h:head><title>Java Server Faces</title></h:head> 
 <body> 
-	<h:outputLabel value="#{controlePrincipalBean.mensagem}"/>
-</body> 
+	<h:outputLabel value="#{controlePrincipalBean.mensagem}"/><br/>
+	<h:form>
+		<h:commandLink action="sobre" value="Sobre... navegação estática" /><br/>
+		<h:commandLink action="#{controlePrincipalBean.sobre()}" 
+			value="Sobre... com navegação dinamica..." /><br/>
+		<h:commandLink action="#{controlePrincipalBean.sobreRedirecionado()}"
+			value="Sobre... redirecionado" /><br/>
+		<h:commandLink action="#{controlePrincipalBean.geraErro()}"
+			value="Erro" /><br/>
+		<h:commandLink action="#{controlePrincipalBean.geraErroGrave()}"
+			value="Erro grave" /><br/>		 
+		<h:commandLink action="#{controlePrincipalBean.geraLogin()}"
+			value="Login" /><br/>
+	</h:form>
+</body>
+</f:view>
 </html>

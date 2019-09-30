@@ -1,2 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<PROCESS model-entity="JSFProcess"/>
+<PROCESS model-entity="JSFProcess">
+ <PROCESS-ITEM NAME="rules:#errorPage.xhtml" PATH="/errorPage.xhtml"
+  SHAPE="240,33,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#loginPage.xhtml" PATH="/loginPage.xhtml"
+  SHAPE="256,177,0,0" model-entity="JSFProcessGroup"/>
+ <PROCESS-ITEM NAME="rules:#*" PATH="/*" SHAPE="32,17,0,0" model-entity="JSFProcessGroup">
+  <PROCESS-ITEM ID="rules:#*:0" NAME="item" PATH="/*" model-entity="JSFProcessItem">
+   <PROCESS-ITEM-OUTPUT
+    ID="erro:#{controlePrincipalBean.geraErro()}:#errorPage.xhtml"
+    NAME="output" PATH="/errorPage.xhtml"
+    TARGET="rules:#errorPage.xhtml"
+    TITLE="#{controlePrincipalBean.geraErro()}:erro" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT ID="login::#loginPage.xhtml" NAME="output1"
+    PATH="/loginPage.xhtml" TARGET="rules:#loginPage.xhtml"
+    TITLE="login" model-entity="JSFProcessItemOutput"/>
+   <PROCESS-ITEM-OUTPUT
+    ID="erro:#{controlePrincipalBean.geraErroGrave()}:#erroGrave.xhtml"
+    NAME="output2" PATH="/erroGrave.xhtml"
+    TARGET="rules:#erroGrave.xhtml"
+    TITLE="#{controlePrincipalBean.geraErroGrave()}:erro" model-entity="JSFProcessItemOutput"/>
+  </PROCESS-ITEM>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM NAME="rules:#erroGrave.xhtml" PATH="/erroGrave.xhtml"
+  SHAPE="272,321,0,0" model-entity="JSFProcessGroup"/>
+</PROCESS>
