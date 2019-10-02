@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd"> 
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core"> 
+
+<h:head><title></title></h:head> 
+<h:body> 
+
+	<!-- Passar dados via form -->
+	<h:form>
+		<h:panelGrid columns="2">
+			<h:outputLabel value="Nome" />
+			<h:inputText value="#{controleBonus.nome}" />
+			
+			<h:outputLabel value="Salario" />
+			<h:inputText value="#{controleBonus.salario}" />
+			
+			<h:outputLabel value="Cargo" />
+			<h:selectOneMenu value="#{controleBonus.cargo}">
+				<f:selectItem itemLabel="Gerente" itemValue="0"/>
+				<f:selectItem itemLabel="Vendedor" itemValue="1"/>
+				<f:selectItem itemLabel="Empacotador" itemValue="2"/>
+			</h:selectOneMenu>
+			
+		</h:panelGrid>
+		<h:commandButton action="#{controleBonus.dadosBonusBean()}" value="Calcular" />
+	</h:form>
+
+	<!-- Passar dados fixo -->
+	<h:link outcome="dadosBonus" value="Calcular" includeViewParams="true">
+		<f:param name="c" value="0"/>
+		<f:param name="n" value="Jorge"/>
+		<f:param name="s" value="1000.00"/>		
+	</h:link>
+	
+</h:body> 
+</html>
