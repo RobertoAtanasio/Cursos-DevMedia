@@ -14,7 +14,7 @@
         <jsf.version>2.2.13</jsf.version>
         <hibernate.orm.version>5.2.12.Final</hibernate.orm.version>
         <hibernate.validator.version>5.4.1.Final</hibernate.validator.version>
-        <mysql.connector.version>5.1.44</mysql.connector.version>
+        <mysql.connector.version>8.0.28</mysql.connector.version>
         <weld.version>2.4.5.Final</weld.version>
     </properties>
 
